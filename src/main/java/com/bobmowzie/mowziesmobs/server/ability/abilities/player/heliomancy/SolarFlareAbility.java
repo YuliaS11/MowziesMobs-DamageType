@@ -6,11 +6,16 @@ import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
+import com.bobmowzie.mowziesmobs.server.damage.DamageTypeHeliomancy;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -98,7 +103,11 @@ public class SolarFlareAbility extends HeliomancyAbilityBase {
                 float damage = 2.0f;
                 float knockback = 3.0f;
                 damage *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get();
-                if (aHit.hurt(user.damageSources().playerAttack(user), damage)) {
+
+                Holder<DamageType> heliomancyDamageTypeHolder = user.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeHeliomancy.HELIOMANCY);
+                DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, user);
+
+                if (aHit.hurt(damageSourceHeliomancy, damage)) {
                     if (knockback > 0) {
                         Vec3 vec3 = aHit.position().subtract(user.position()).normalize().scale((double)knockback * 0.6D);
                         if (vec3.lengthSqr() > 0.0D) {

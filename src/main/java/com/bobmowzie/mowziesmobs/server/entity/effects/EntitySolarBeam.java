@@ -11,18 +11,26 @@ import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoRenderPlayer;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.PlayerCapability;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
+import com.bobmowzie.mowziesmobs.server.damage.DamageTypeHeliomancy;
 import com.bobmowzie.mowziesmobs.server.damage.DamageUtil;
 import com.bobmowzie.mowziesmobs.server.entity.LeaderSunstrikeImmune;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -213,11 +221,16 @@ public class EntitySolarBeam extends Entity {
                         damageFire *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.75;
                         damageMob *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.75;
                     }
+
+                    Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeHeliomancy.HELIOMANCY);
+
+                    DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, caster);
+
                     if (target instanceof LivingEntity) {
-                        DamageUtil.dealMixedDamage((LivingEntity) target, damageSources().mobProjectile(this, caster), damageMob, damageSources().onFire(), damageFire);
+                        DamageUtil.dealMixedDamage((LivingEntity) target, damageSourceHeliomancy, damageMob, damageSources().onFire(), damageFire);
                     }
                     else {
-                        target.hurt(damageSources().mobProjectile(this, caster), damageMob);
+                        target.hurt(damageSourceHeliomancy, damageMob);
                     }
                 }
             } else {

@@ -8,10 +8,15 @@ import com.bobmowzie.mowziesmobs.client.particle.util.ParticleComponent.Property
 import com.bobmowzie.mowziesmobs.client.particle.util.RibbonComponent;
 import com.bobmowzie.mowziesmobs.client.particle.util.RibbonComponent.PropertyOverLength;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
+import com.bobmowzie.mowziesmobs.server.damage.DamageTypeHeliomancy;
 import com.bobmowzie.mowziesmobs.server.damage.DamageUtil;
 import com.bobmowzie.mowziesmobs.server.entity.LeaderSunstrikeImmune;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -84,7 +89,11 @@ public class EntitySuperNova extends EntityMagicEffect {
                             damageFire *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.8;
                             damageMob *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.8;
                         }
-                        boolean hitWithFire = DamageUtil.dealMixedDamage(livingEntity, damageSources().mobProjectile(this, getCaster()), damageMob, damageSources().onFire(), damageFire).getRight();
+
+                        Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeHeliomancy.HELIOMANCY);
+                        DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, getCaster());
+
+                        boolean hitWithFire = DamageUtil.dealMixedDamage(livingEntity, damageSourceHeliomancy, damageMob, damageSources().onFire(), damageFire).getRight();
                         if (hitWithFire) {
                             Vec3 diff = livingEntity.position().subtract(position());
                             diff = diff.normalize();

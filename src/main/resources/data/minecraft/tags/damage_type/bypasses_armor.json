@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mowziesmobs:heliomancy",
+    "mowziesmobs:geomancy",
+    "mowziesmobs:cryomancy",
+    "mowziesmobs:toxicomancy"
+  ]
+}
