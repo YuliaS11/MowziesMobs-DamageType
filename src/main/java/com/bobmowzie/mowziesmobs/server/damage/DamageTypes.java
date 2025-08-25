@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 
-public class DamageTypeHeliomancy {
+public class DamageTypes {
     public static final ResourceKey<DamageType> HELIOMANCY = ResourceKey.create(
             Registries.DAMAGE_TYPE,
             new ResourceLocation(MowziesMobs.MODID, "heliomancy")

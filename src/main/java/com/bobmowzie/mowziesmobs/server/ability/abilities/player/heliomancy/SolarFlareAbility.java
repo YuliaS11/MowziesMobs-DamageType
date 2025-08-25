@@ -6,7 +6,7 @@ import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
-import com.bobmowzie.mowziesmobs.server.damage.DamageTypeHeliomancy;
+import com.bobmowzie.mowziesmobs.server.damage.DamageTypes;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
@@ -104,7 +104,7 @@ public class SolarFlareAbility extends HeliomancyAbilityBase {
                 float knockback = 3.0f;
                 damage *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get();
 
-                Holder<DamageType> heliomancyDamageTypeHolder = user.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeHeliomancy.HELIOMANCY);
+                Holder<DamageType> heliomancyDamageTypeHolder = user.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
                 DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, user);
 
                 if (aHit.hurt(damageSourceHeliomancy, damage)) {
