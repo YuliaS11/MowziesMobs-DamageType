@@ -73,6 +73,10 @@ public class EntitySuperNova extends EntityMagicEffect {
             setBoundingBox(getBoundingBox().inflate(scale));
             setPos(xo, yo, zo);
             List<Entity> hitList = getEntitiesNearbyCube(Entity.class, scale);
+
+            Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
+            DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, getCaster());
+
             for (Entity entity : hitList) {
             	if (getCaster() == entity) continue;
                 if (entity instanceof ItemEntity) continue;
@@ -89,9 +93,6 @@ public class EntitySuperNova extends EntityMagicEffect {
                             damageHeliomancy *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.8;
                             damageMob *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get() * 0.8;
                         }
-
-                        Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
-                        DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, getCaster());
 
                         boolean hitWithLight = DamageUtil.dealMixedDamage(livingEntity, damageSourceHeliomancy, damageHeliomancy, damageSources().mobProjectile(this, getCaster()), damageMob).getRight();
                         if (hitWithLight) {

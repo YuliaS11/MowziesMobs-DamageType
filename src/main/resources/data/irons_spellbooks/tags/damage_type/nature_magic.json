@@ -1,8 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mowziesmobs:heliomancy",
-    "mowziesmobs:ice_breath",
+    "mowziesmobs:geomancy",
     "mowziesmobs:toxicomancy"
   ]
 }

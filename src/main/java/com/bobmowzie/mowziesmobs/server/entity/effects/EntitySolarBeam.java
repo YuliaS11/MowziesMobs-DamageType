@@ -203,6 +203,9 @@ public class EntitySolarBeam extends Entity {
                 spawnExplosionParticles(2);
             }
             if (!level().isClientSide) {
+                Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
+                DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, caster);
+
                 for (Entity target : hit) {
                     if (caster instanceof EntityUmvuthi && target instanceof LeaderSunstrikeImmune) {
                         continue;
@@ -220,8 +223,6 @@ public class EntitySolarBeam extends Entity {
                     }
 
                     if (target instanceof LivingEntity) {
-                        Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
-                        DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, caster);
                         DamageUtil.dealMixedDamage((LivingEntity) target, damageSourceHeliomancy, damageHeliomancy, damageSources().mobProjectile(this, caster), damageMob);
                     }
                     else {

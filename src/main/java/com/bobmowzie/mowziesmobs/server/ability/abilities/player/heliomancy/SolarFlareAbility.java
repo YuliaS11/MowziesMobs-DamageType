@@ -96,6 +96,10 @@ public class SolarFlareAbility extends HeliomancyAbilityBase {
             Player user = getUser();
             float radius = 3.2f;
             List<LivingEntity> hit = getEntityLivingBaseNearby(user, radius, radius, radius, radius);
+
+            Holder<DamageType> heliomancyDamageTypeHolder = user.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
+            DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, user);
+
             for (LivingEntity aHit : hit) {
                 if (aHit == getUser()) {
                     continue;
@@ -103,9 +107,6 @@ public class SolarFlareAbility extends HeliomancyAbilityBase {
                 float damage = 2.0f;
                 float knockback = 3.0f;
                 damage *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get();
-
-                Holder<DamageType> heliomancyDamageTypeHolder = user.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
-                DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, user);
 
                 if (aHit.hurt(damageSourceHeliomancy, damage)) {
                     if (knockback > 0) {

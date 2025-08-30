@@ -201,6 +201,11 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
         AABB region = new AABB(getX() - radius, getY() - 0.5, getZ() - radius, getX() + radius, this.level().getMaxBuildHeight() + 20, getZ() + radius);
         List<Entity> entities = level().getEntities(this, region);
         double radiusSq = radius * radius;
+
+
+        Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
+        DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, caster);
+
         for (Entity e : entities) {
             if (!(e instanceof LivingEntity)) continue;
             LivingEntity entity = (LivingEntity) e;
@@ -221,9 +226,6 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
                     damageHeliomancy *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get();
                     damageMob *= ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.sunsBlessingAttackMultiplier.get();
                 }
-
-                Holder<DamageType> heliomancyDamageTypeHolder = level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.HELIOMANCY);
-                DamageSource damageSourceHeliomancy = new DamageSource(heliomancyDamageTypeHolder, this, caster);
 
                 boolean hitWithLight = DamageUtil.dealMixedDamage(entity, damageSourceHeliomancy, damageHeliomancy, damageSources().mobProjectile(this, caster), damageMob).getRight();
                 if (hitWithLight)
